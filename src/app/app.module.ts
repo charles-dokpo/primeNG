@@ -13,6 +13,12 @@ import {ListboxModule} from 'primeng/listbox';
 import {ButtonModule} from 'primeng/button';
 import {MultiSelectModule} from 'primeng/multiselect';
 
+import {TableModule} from 'primeng/table';
+
+import { CarService } from './carservice';
+import { HttpClientModule } from '@angular/common/http';
+
+
 
 @NgModule({
   declarations: [
@@ -27,9 +33,11 @@ import {MultiSelectModule} from 'primeng/multiselect';
     CalendarModule,
     ListboxModule,
     ButtonModule,
-    MultiSelectModule
+    MultiSelectModule,
+    TableModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [CarService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

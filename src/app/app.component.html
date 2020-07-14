@@ -1,16 +1,75 @@
+<div class="p-col-12 p-md-4">
+  <!--  <h3>dates à saisir </h3> Du
+  <p-calendar [(ngModel)]="minDate" dateFormat="dd.mm.yy"></p-calendar> au 
+  <p-calendar [(ngModel)]="maxDate" dateFormat="dd.mm.yy"></p-calendar>
+  test  -->
+
+  <div class="p-col-12 p-md-4">
+    <h3>Choissisiez le mois </h3>
+    <p-calendar [(ngModel)]="monthDate" view="month" dateFormat="dd/mm/yy" placeholder="JJ/MM/AAAA"
+      [yearNavigator]="true" yearRange="2000:2050" [readonlyInput]="true" (onSelect)="selectMOnth()"></p-calendar>
+    <p *ngIf=" validateMOnth()"> du {{firstDay}} au {{lastDay}} inclus </p>
+  </div>
+</div>
+<!-- 
+<p *ngIf=" validateDate(maxDate)"> Saisie des dates non valides </p> -->
+<div class="p-col-12 p-md-4">
+  <h3 class="first">Salles Skipper à prendre en compte</h3>
+  <p-multiSelect [options]="rooms" [(ngModel)]="selectedRooms" defaultLabel="Sélectionner les salles"
+    emptyFilterMessage="aucun résultat" [resetFilterOnHide]="true" [maxSelectedLabels]=0
+    selectedItemsLabel="{0} select." optionLabel="name"></p-multiSelect>
+  <p>Salles séléctionnées: <span *ngFor="let item of selectedRooms; let isLast = last ">
+      {{ isLast ? item.name : item.name + ','}} </span></p>
+</div>
+<div class="p-col-12 p-md-4">
+  <h3> Paramétrer le type d'audience </h3>
+  <p-multiSelect [options]="checkRoom" [(ngModel)]="checkRoomSelected" [resetFilterOnHide]="false" [maxSelectedLabels]=0
+    selectedItemsLabel="{0} select." [filter]="false" [showToggleAll]="false" optionLabel="name" >
+  </p-multiSelect>
+</div>
 
 <div class="p-col-12 p-md-4">
-  <h3>dates à saisir </h3> Du
-  <p-calendar [(ngModel)]="date1"></p-calendar> au 
-  <p-calendar [(ngModel)]="date2"></p-calendar>
+<div *ngIf="generateHearing()">
+  <!-- <button class="oae-button" type="submit">
+    Générer le planning des audiences
+    [selectionLimit]="1"
+  </button> -->
+  <button pButton type="button" class="ui-button-raised ui-button-success" (click)="validateHearing()"> Générer le planning des audiences </button>
+</div>
 </div>
 
 
-<h3 class="first">Salles Skipper à prendre en compte</h3>
-<p-multiSelect [options]="cars" [(ngModel)]="selectedCars1" defaultLabel="Sélectionner les salles" emptyFilterMessage="aucun résultat" [resetFilterOnHide]="true"
-[maxSelectedLabels]=0 selectedItemsLabel= "selection : {0}" ></p-multiSelect>
-<p>Salles séléctionnées: {{selectedCars1}}</p>
+<h3>Frozen Columns</h3>
+
+
+<p-table *ngIf="scrollableCols.length > 0 && frozenCols.length > 0 " [columns]="scrollableCols" [frozenColumns]="frozenCols" [value]="cars1" [scrollable]="true" scrollHeight="200px" frozenWidth="300px">
+    <ng-template pTemplate="colgroup" let-columns>
+        <colgroup>
+            <col *ngFor="let col of columns" style="width:300px">
+        </colgroup>
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{col |json }} 
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td *ngFor="let col of columns">
+              <span *ngIf="col.field === 'Date'"> {{ rowData.Date }}  </span>
+              <span *ngIf="col.field !== 'Date'"> {{ rowData.field }}  </span>
+            </td>
+           <!--  <td *ngFor="let col2 of columns" *ngIf="col2.field === 'Date'">
+              {{rowData.Date}} 
+            </td> -->
+        </tr>
+    </ng-template>
+</p-table>
 
 <router-outlet></router-outlet>
 
-
+<!-- 
+     
+-->
