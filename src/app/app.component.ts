@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {SelectItem} from 'primeng/api';
 import { CarService } from './carservice';
 import { Car } from './car';
+import * as moment from 'moment';
 
 interface Rooms {
   name: string ;
@@ -121,8 +122,8 @@ ngOnInit() {
    }*/
 
    selectMOnth(){
-     this.firstDay = new Date(this.monthDate.getFullYear(), this.monthDate.getMonth(), 1).toLocaleString().substring(0, 10);
-     this.lastDay = new Date(this.monthDate.getFullYear(), this.monthDate.getMonth() + 1, 0).toLocaleString().substring(0, 10);
+     this.firstDay = (moment(this.monthDate).format('DD/MM/YYYY'));
+     this.lastDay = (moment(this.monthDate).endOf('month').format('DD/MM/YYYY'));
    }
 
    validateMOnth(): boolean {
@@ -130,14 +131,28 @@ ngOnInit() {
 }
 
 validateHearing(){
-  let date = new Date(this.monthDate.getFullYear(),this.monthDate.getMonth(), 1);
+
+  // let date = new Date(this.monthDate.getFullYear(),this.monthDate.getMonth(), 1);
+
+   let date = moment(new Date(this.monthDate.getFullYear(),this.monthDate.getMonth(), 1));
+
+ // let date = moment(this.monthDate);
+  console.log(date);
+ // let date = (moment(this.monthDate));
+
   let arraydate1 = [];
   let arraydate2 = [];
 
-  while (date.getMonth() === this.monthDate.getMonth()) {
+ /*  while (date.getMonth() === this.monthDate.getMonth()) {
     this.days.push(new Date(date).toLocaleString().substring(0, 10));
     date.setDate(date.getDate() + 1);
+  }*/
+
+   while (date.month() === this.monthDate.getMonth()) {
+    this.days.push(date.format('DD/MM/YYYY'));
+    date.set('date', date.date() + 1);
   }
+  
   console.log(this.days);
 // pour la selection des salles OK
   this.selectedRooms.forEach( el => this.scrollableCols.push({ field : el.name , header : el.name}));
@@ -148,12 +163,12 @@ validateHearing(){
   console.log(this.checkRoomSelected);
 
   this.checkRoomSelected.forEach( el => arraydate2.push({ field : el.name , header : el.name}));
-    
+
   this.days.forEach( el => arraydate1.push({ Date : el}));
 
   this.cars1 = arraydate1;
 
-  this.cars1.forEach(el => {el.field = "ACO" ; el.name ="ACO" })
+  this.cars1.forEach(el => {el.field = 'ACO' ; el.name ='ACO' })
 
   console.log(this.cars1);
 
