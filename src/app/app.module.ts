@@ -14,6 +14,8 @@ import {ButtonModule} from 'primeng/button';
 import {MultiSelectModule} from 'primeng/multiselect';
 
 import {TableModule} from 'primeng/table';
+import {DialogModule} from 'primeng/dialog';
+import {DynamicDialogModule} from 'primeng/dynamicdialog';
 
 import { CarService } from './carservice';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,7 +37,9 @@ import { HttpClientModule } from '@angular/common/http';
     ButtonModule,
     MultiSelectModule,
     TableModule,
-    HttpClientModule
+    HttpClientModule,
+    DialogModule,
+    DynamicDialogModule
   ],
   providers: [CarService],
   bootstrap: [AppComponent]

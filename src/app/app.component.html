@@ -21,28 +21,71 @@
   <p>Salles séléctionnées: <span *ngFor="let item of selectedRooms; let isLast = last ">
       {{ isLast ? item.name : item.name + ','}} </span></p>
 </div>
+
+<div class="p-col-12 p-md-4">
+  <div *ngIf="selectedRooms.length > 0 && validateMOnth()">
+    <button id="test" pButton type="button" class="ui-button-raised ui-button-success" (click)="generateHearing()"> Générer le planning </button>
+  </div>
+  </div>
+
+  <!-- <app-planning [selectedRoomsFromParent]="selectedRooms" [displayFrozenColumnFromParent] = "displayFrozenColumn" [daysMonthsFromParent] ="daysMonths" ></app-planning> -->
+
+
 <div class="p-col-12 p-md-4">
   <h3> Paramétrer le type d'audience </h3>
-  <p-multiSelect [options]="checkRoom" [(ngModel)]="checkRoomSelected" [resetFilterOnHide]="false" [maxSelectedLabels]=0
+  <p-multiSelect [options]="audienceType" [(ngModel)]="audienceTypeSelected" [resetFilterOnHide]="false" [maxSelectedLabels]=0
     selectedItemsLabel="{0} select." [filter]="false" [showToggleAll]="false" optionLabel="name" >
   </p-multiSelect>
 </div>
 
 <div class="p-col-12 p-md-4">
-<div *ngIf="generateHearing()">
-  <!-- <button class="oae-button" type="submit">
-    Générer le planning des audiences
-    [selectionLimit]="1"
-  </button> -->
-  <button pButton type="button" class="ui-button-raised ui-button-success" (click)="validateHearing()"> Générer le planning des audiences </button>
+<div *ngIf="hearingAudienceOk()">
+  <button pButton type="button" class="ui-button-raised ui-button-success" (click)="generateHearing()"> Générer le tableau d'occupation des salles avec le type d'audience </button>
 </div>
 </div>
 
 
-<h3>Frozen Columns</h3>
 
+<!-- <h3>Modal</h3>
+<button type="button" (click)="showModalDialog()" pButton icon="pi pi-external-link" label="Show"></button>
+<p-dialog header="Godfather I" [(visible)]="displayModal" [modal]="true" [style]="{width: '500vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="true" [maximizable]="true" >
+    <div><p-table  [columns]="selectedRooms" [frozenColumns]="displayFrozenColumn" [value]="daysMonths" [scrollable]="true" scrollHeight="200px" frozenWidth="300px">
 
-<p-table *ngIf="scrollableCols.length > 0 && frozenCols.length > 0 " [columns]="scrollableCols" [frozenColumns]="frozenCols" [value]="cars1" [scrollable]="true" scrollHeight="200px" frozenWidth="300px">
+      <ng-template pTemplate="colgroup" let-columns>
+          <colgroup>
+              <col *ngFor="let col of columns" style="width:300px">
+          </colgroup>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+          <tr>
+              <th *ngFor="let col of columns">
+                  {{col |json }} 
+              </th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+          <tr>
+              <td *ngFor="let col of columns">
+                <span *ngIf="col.field === 'Date'"> {{ rowData.Date }}  </span>
+                <span *ngIf="col.field !== 'Date'" [ngStyle]="{'visibility': audienceTypeSelected.length > 0 ? 'visible' : 'hidden' }" > {{ rowData.name }}  </span>
+              </td>
+          
+          </tr>
+      </ng-template>
+  </p-table>
+</div>
+        <p-footer>
+            <button type="button" pButton icon="pi pi-check" (click)="displayModal=false" label="Yes"></button>
+            <button type="button" pButton icon="pi pi-times" (click)="displayModal=false" label="No" class="ui-button-secondary"></button>
+        </p-footer>
+</p-dialog> -->
+
+<!-- <div *ngIf="selectedRooms.length > 0 && daysMonths.length > 0 ">
+<h3 *ngIf="audienceTypeSelected.length > 0 ; else elseBlock">Tableau d'occupation des salles avec le type d'audience </h3>
+<ng-template #elseBlock> <h3> Tableau d'occupation des salles </h3> </ng-template>
+<p-table  [columns]="selectedRooms" [frozenColumns]="displayFrozenColumn" [value]="daysMonths" [scrollable]="true" scrollHeight="200px" frozenWidth="300px">
+
     <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
             <col *ngFor="let col of columns" style="width:300px">
@@ -59,17 +102,18 @@
         <tr>
             <td *ngFor="let col of columns">
               <span *ngIf="col.field === 'Date'"> {{ rowData.Date }}  </span>
-              <span *ngIf="col.field !== 'Date'"> {{ rowData.field }}  </span>
+              <span *ngIf="col.field !== 'Date'" [ngStyle]="{'visibility': audienceTypeSelected.length > 0 ? 'visible' : 'hidden' }" > {{ rowData.name }}  </span>
             </td>
-           <!--  <td *ngFor="let col2 of columns" *ngIf="col2.field === 'Date'">
-              {{rowData.Date}} 
-            </td> -->
+        
         </tr>
     </ng-template>
 </p-table>
+</div> -->
 
 <router-outlet></router-outlet>
 
 <!-- 
-     
+       <td *ngFor="let col2 of columns" *ngIf="col2.field === 'Date'">
+              {{rowData.Date}} 
+            </td> 
 -->
