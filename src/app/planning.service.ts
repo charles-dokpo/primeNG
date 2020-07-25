@@ -14,8 +14,8 @@ emitValue = new EventEmitter<any>();
 
   emitSubject1 = new Subject<any[]>();
 
- 
-  emitFinalValue(array) {
+
+emitFinalValue(array) {
     console.log(array);
     this.value = array;
     return this.value;

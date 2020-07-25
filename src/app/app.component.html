@@ -17,9 +17,9 @@
   <h3 class="first">Salles Skipper à prendre en compte</h3>
   <p-multiSelect [options]="rooms" [(ngModel)]="selectedRooms" defaultLabel="Sélectionner les salles"
     emptyFilterMessage="aucun résultat" [resetFilterOnHide]="true" [maxSelectedLabels]=0
-    selectedItemsLabel="{0} select." optionLabel="name"></p-multiSelect>
+    selectedItemsLabel="{0} select." optionLabel="field"></p-multiSelect>
   <p>Salles séléctionnées: <span *ngFor="let item of selectedRooms; let isLast = last ">
-      {{ isLast ? item.name : item.name + ','}} </span></p>
+      {{ isLast ? item.field : item.field + ','}} </span></p>
 </div>
 
 <div class="p-col-12 p-md-4">

@@ -1,23 +1,23 @@
 
 <div>
- <p-table  [columns]="selectedRoom" [frozenColumns]="frozenColumn" [value]="daysMonths" [scrollable]="true" scrollHeight="500px" frozenWidth="200px">
+ <p-table  [columns]="selectedRoom" [frozenColumns]="frozenColumn" [value]="daysMonths" [scrollable]="true" scrollHeight="500px" frozenWidth="150px">
     <ng-template pTemplate="colgroup" let-columns>
         <colgroup>
-            <col *ngFor="let col of columns" style="width:300px">
+            <col *ngFor="let col of columns" id="col" style="width:150px">
         </colgroup>
     </ng-template>
     <ng-template pTemplate="header" let-columns>
-        <tr>
-            <th *ngFor="let col of columns">
+        <tr style="text-align : center">
+            <th *ngFor="let col of columns"  >
                 {{col.field }} 
             </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr>
+        <tr style="text-align : center">
             <td *ngFor="let col of columns">
               <span *ngIf="col.field === 'Date'"> {{ rowData.Date }}  </span>
-              <span *ngIf="col.field !== 'Date'" [ngStyle]="{'visibility': rowData.empty  ? ' hidden' : 'visible' }"> {{ rowData | json }}  </span>
+              <span *ngIf="col.field !== 'Date'" [ngStyle]="{'visibility': rowData.Holiday  ? ' visible' : 'hidden' }"> {{ rowData.Holiday ? 'FERIE' : 'ACO' }}  </span>
             </td>
 
         </tr>

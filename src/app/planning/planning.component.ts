@@ -13,11 +13,11 @@ import { map } from 'rxjs/operators';
 export class PlanningComponent implements OnInit {
 
 private selectedRoomsFromParent: Subscription;
-selectedRoom : any;
+selectedRoom: any;
 private displayFrozenColumnFromParent: Subscription;
-frozenColumn  : any;
+frozenColumn: any;
 private  daysMonthsFromParent: Subscription;
-daysMonths : any;
+daysMonths: any;
 
 clickObservable: Subscription;
 
@@ -25,7 +25,6 @@ clickObservable: Subscription;
 
   ngOnInit(): void {
 
- 
   this.selectedRoom = this.planning.value.roomSelected;
   this.frozenColumn = this.planning.value.columnFrozen;
   this.daysMonths = this.planning.value.allDates;
@@ -41,7 +40,6 @@ clickObservable: Subscription;
     );
     //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
     //Add 'implements AfterViewInit' to the class.
-    
   }
 
  /* click() {
@@ -56,6 +54,4 @@ clickObservable: Subscription;
     const subscribe = example.subscribe(val => console.log(val));
 
   }*/
-
-
 }

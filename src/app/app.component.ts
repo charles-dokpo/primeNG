@@ -2,16 +2,13 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CarService } from './carservice';
 import * as moment from 'moment';
 
-//pour l'ouverture de la modal
+// pour l'ouverture de la modal
 import {DialogService} from 'primeng/dynamicdialog';
 import {DynamicDialogRef} from 'primeng/dynamicdialog';
 import { PlanningComponent } from './planning/planning.component';
 import {PlanningService} from './planning.service';
 import {DialogModule} from 'primeng/dialog';
-
-interface Rooms {
-  name: string ;
-}
+import {BankHolidayService} from './bank-holiday.service';
 
 
 
@@ -37,7 +34,7 @@ export class AppComponent  implements OnInit {
   daysMonths: any [] = [];
 
   // select. de la salle
-  rooms: Rooms [];
+  rooms: any [];
   selectedRooms: any [] = [];
 
 
@@ -51,45 +48,60 @@ export class AppComponent  implements OnInit {
   displayFrozenColumn: any[] = [];
   days: any [] = [];
 
-  //pour la partie modal
+  holiday: any;
+
+  // pour la partie modal
   ref: DynamicDialogRef;
   displayModal: boolean;
 
-constructor(public dialogService: DialogService, public planningService: PlanningService) { }
+constructor(public dialogService: DialogService, public planningService: PlanningService,
+            public bankHolidayService: BankHolidayService) { }
 
 // tslint:disable-next-line: typedef
 ngOnInit() {
-    this.rooms = [
-        { name: '001'},
-        { name: '002'},
-        { name: '003'},
-        { name: '004'},
-        { name: '005'},
-        { name: '006'},
-        { name: '007'},
-        { name: '008'},
-        { name: '009'},
-        { name: '010'},
-        { name: '011'},
-        { name: '012'},
-        { name: '013'},
-        { name: '014'},
-        { name: '015'},
-        { name: '016'},
-        { name: '017'},
-        { name: '018'},
-        { name: '019'},
-        { name: '020'}
+
+  const resp = this.bankHolidayService.getAllHoliday();
+  resp.subscribe((data) => {this.holiday = JSON.parse(JSON.stringify(data)); });
+
+  this.rooms = [
+        { field: '001'},
+        { field: '002'},
+        { field: '003'},
+        { field: '004'},
+        { field: '005'},
+        { field: '006'},
+        { field: '007'},
+        { field: '008'},
+        { field: '009'},
+        { field: '010'},
+        { field: '011'},
+        { field: '012'},
+        { field: '013'},
+        { field: '014'},
+        { field: '015'},
+        { field: '016'},
+        { field: '017'},
+        { field: '018'},
+        { field: '019'},
+        { field: '020'}
      ];
 
-    this.audienceType = [
+  this.audienceType = [
       { name: 'ACO'},
       { name: 'AER'},
    ];
 
+     // pour l'en tete de la colonne bloqué OK
+  this.displayFrozenColumn.push({ field : 'Date' , header : 'Date'});
+
 
 }
+/*
+ngAfterViewChecked(): void {
 
+  console.log(this.holiday);
+}
+*/
 showModalDialog() {
   this.displayModal = true;
 }
@@ -113,10 +125,26 @@ showModalDialog() {
 // tslint:disable-next-line: typedef
 allDaysOfMonth(array) {
   const date = moment(new Date(this.monthDate.getFullYear(), this.monthDate.getMonth(), 1));
+  const bankDays = (Object.keys(this.holiday));
+
+  let isHoliday = false;
 
   while (date.month() === this.monthDate.getMonth()) {
-      array.push({ Date : date.format('DD/MM/YYYY')});
-      date.set('date', date.date() + 1);
+
+       for (let i = 0; i < bankDays.length; i++) {
+         const element = moment(bankDays[i]);
+         if(date.year() === element.year() && date.month() === element.month() &&
+        date.date() === element.date()) {
+          isHoliday = true;
+          break;
+        }else {
+          isHoliday = false;
+        }
+
+       }
+       array.push({ Date : date.format('DD/MM/YYYY'), Holiday : isHoliday });
+       date.set('date', date.date() + 1);
+       console.log(array)
   }
   return array;
 }
@@ -126,28 +154,8 @@ generateHearing() {
 
   this.allDaysOfMonth(this.daysMonths);
 
-
-  this.daysMonths.forEach( (el) => {
-    el.field = this.audienceTypeSelected[0]?.name;
-    el.name = this.audienceTypeSelected[0]?.name;
-    // TO DO : changer lorsque tableau type d'audience complété
-    el.empty = true;
-  });
-
-  this.selectedRooms.forEach( (el, i) => {
-    el.field =  this.selectedRooms[i]?.name;
-  });
-
-  // pour l'en tete de la colonne bloqué OK
-  this.displayFrozenColumn.push({ field : 'Date' , header : 'Date'});
-
   const finalValue = {allDates : this.daysMonths, columnFrozen : this.displayFrozenColumn, roomSelected : this.selectedRooms };
   this.planningService.emitFinalValue(finalValue);
-
-/*
-  this.planningService.emitdaysMonths(this.daysMonths);
-
-  */
 
   this.ref = this.dialogService.open(PlanningComponent, {
     header: 'Tableau occupation des salles',
