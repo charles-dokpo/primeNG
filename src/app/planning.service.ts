@@ -1,5 +1,7 @@
 import { Injectable, EventEmitter } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Planning } from './planning';
+import { BankHolidayService } from './bank-holiday.service';
 
 
 @Injectable({
@@ -8,27 +10,28 @@ import { Subject } from 'rxjs';
 export class PlanningService {
 
 emitValue = new EventEmitter<any>();
-  value: any = [];
+value = new Planning();
+responseSavePlanning: any;
 
-  constructor() { }
-
-  emitSubject1 = new Subject<any[]>();
+  constructor(private bankholidayService: BankHolidayService) { }
 
 
 emitFinalValue(array) {
-    console.log(array);
-    this.value = array;
-    return this.value;
-   // return new EventEmitter<any>(array);
+    return this.value = array;
+     }
+
+   save(){
+
+    const sendPlanningData: Planning =  {
+      allDates : JSON.stringify(this.value.allDates),
+      roomSelected :  JSON.stringify(this.value.roomSelected),
+      startDate : this.value.startDate,
+      endDate : this.value.endDate
+    };
+
+    this.responseSavePlanning = this.bankholidayService.savePlanning(sendPlanningData);
+
    }
-
-
-  emitdaysMonths(array) {
-    return this.emitSubject1.next(array.slice());
-   }
-
-
-
 }
 
 
